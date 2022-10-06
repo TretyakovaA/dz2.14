@@ -16,7 +16,7 @@ public class IntegerListImpl implements IntegerList {
     // Вернуть добавленный элемент
     // в качестве результата выполнения.
     public Integer add(int item) {
-        validatorSize();
+        growNeeded();
         validatorItem(item);
         storage[size++] = item;
         return item;
@@ -30,8 +30,8 @@ public class IntegerListImpl implements IntegerList {
     // Вернуть добавленный элемент
     // в качестве результата выполнения.
     public Integer add(int index, int item) {
+        growNeeded();
         validatorIndexItem(index);
-        validatorSize();
         validatorItem(item);
         if (index == size) {
             storage[size++] = item;
@@ -181,6 +181,34 @@ public class IntegerListImpl implements IntegerList {
         }
 
     }
+    public  void quickSort (Integer [] array, int begin, int end){
+        if (begin < end){
+            int partitionIndex = partition (array, begin, end);
+            quickSort(array, begin, partitionIndex);
+            quickSort(array, partitionIndex+1, end);
+        }
+
+    }
+    private static int partition(Integer [] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+    private static void swapElements(Integer[] arr, int left, int right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+    }
     public static boolean binarySearch(Integer [] arr, int element) {
         int min = 0;
         int max = arr.length - 1;
@@ -199,6 +227,14 @@ public class IntegerListImpl implements IntegerList {
             }
         }
         return false;
+    }
+    private void grow (){
+        storage = Arrays.copyOf(storage, size+size/2);
+    }
+    private void growNeeded (){
+        if (size == storage.length)
+            grow();
+
     }
 
 
